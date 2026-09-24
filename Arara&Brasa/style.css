@@ -1145,3 +1145,127 @@ nav a.active::after {
 
 }
 
+
+.checkout-btn {
+
+    width: 100%;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 14px;
+
+    background: var(--green);
+
+    color: white;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+}
+
+
+.checkout-btn:hover {
+
+    background: var(--orange);
+
+}
+
+
+.delivery-info-section {
+
+    background: #f1e8d5;
+
+    padding: 60px 10%;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 30px;
+
+    text-align: center;
+
+}
+
+
+.delivery-info-section span {
+
+    font-size: 35px;
+
+}
+
+
+.delivery-info-section h3 {
+
+    margin: 10px 0;
+
+}
+
+
+.delivery-info-section p {
+
+    color: var(--gray);
+
+}
+
+
+footer {
+
+    background: var(--green-dark);
+
+    color: white;
+
+    text-align: center;
+
+    padding: 50px 20px;
+
+}
+
+
+.footer-logo {
+
+    font-size: 24px;
+
+    margin-bottom: 10px;
+
+}
+
+
+footer > p {
+
+    color: #c7d3ca;
+
+}
+
+
+.footer-links {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 25px;
+
+    margin: 25px 0;
+
+}
+
+
+.footer-links a:hover {
+
+    color: var(--yellow);
+
+}
+
+
+.copyright {
+
+    font-size: 13px;
+
+    opacity: .7;
+
+}
+
