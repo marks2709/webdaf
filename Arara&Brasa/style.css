@@ -684,3 +684,150 @@ nav a.active::after {
 
 }
 
+
+.page-header {
+
+    text-align: center;
+
+    padding: 90px 20px;
+
+    background: var(--green);
+
+    color: white;
+
+}
+
+
+.page-header h2 {
+
+    margin-bottom: 10px;
+
+}
+
+
+.page-header p {
+
+    color: #d8e1da;
+
+}
+
+
+.menu-section {
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 70px 20px;
+
+}
+
+
+.menu-category {
+
+    margin-bottom: 70px;
+
+}
+
+
+.menu-category > h2 {
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 32px;
+
+    margin-bottom: 25px;
+
+    color: var(--green);
+
+}
+
+
+.menu-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+
+}
+
+
+.menu-item {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    display: flex;
+
+    gap: 20px;
+
+    border: 1px solid #eee;
+
+    transition: .3s;
+
+}
+
+
+.menu-item:hover {
+
+    transform: translateY(-4px);
+
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+
+}
+
+
+.food-icon {
+
+    width: 75px;
+
+    height: 75px;
+
+    min-width: 75px;
+
+    border-radius: 12px;
+
+    background: #f4ead5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 38px;
+
+}
+
+
+.food-info h3 {
+
+    margin-bottom: 5px;
+
+}
+
+
+.food-info p {
+
+    color: var(--gray);
+
+    font-size: 14px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.food-info strong {
+
+    color: var(--orange);
+
+    font-size: 18px;
+
+}
+
