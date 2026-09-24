@@ -160,3 +160,93 @@
 
         </div>
 
+
+        <div class="delivery-card">
+
+            <div class="delivery-food">
+                🥘
+            </div>
+
+            <div class="delivery-info">
+
+                <h3>Escondidinho de Carne</h3>
+
+                <p>
+                    Purê de mandioca e carne desfiada.
+                </p>
+
+                <strong>R$ 37,90</strong>
+
+                <button
+                    onclick="addToCart('Escondidinho de Carne', 37.90)"
+                    class="add-btn">
+
+                    + Adicionar
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CARRINHO -->
+
+    <aside class="cart">
+
+        <div class="cart-header">
+
+            <h2>🛒 Seu pedido</h2>
+
+            <span id="cart-count">0</span>
+
+        </div>
+
+
+        <div id="cart-items">
+
+            <div class="empty-cart">
+
+                🦜
+
+                <p>
+                    Seu carrinho está vazio.
+                </p>
+
+                <small>
+                    Adicione algum prato para começar.
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="cart-footer">
+
+            <div class="cart-total">
+
+                <span>Total</span>
+
+                <strong id="cart-total">
+                    R$ 0,00
+                </strong>
+
+            </div>
+
+            <button
+                class="checkout-btn"
+                onclick="finishOrder()">
+
+                Finalizar pedido pelo WhatsApp
+
+            </button>
+
+        </div>
+
+    </aside>
+
+</section>
+
