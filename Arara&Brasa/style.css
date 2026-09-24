@@ -1269,3 +1269,200 @@ footer > p {
 
 }
 
+
+@media (max-width: 900px) {
+
+    .header {
+
+        padding: 0 5%;
+
+    }
+
+    nav {
+
+        display: none;
+
+        position: absolute;
+
+        top: 82px;
+
+        left: 0;
+
+        right: 0;
+
+        background: var(--green);
+
+        flex-direction: column;
+
+        padding: 25px;
+
+        gap: 15px;
+
+    }
+
+    nav.open {
+
+        display: flex;
+
+    }
+
+    .menu-btn {
+
+        display: block;
+
+    }
+
+    .hero {
+
+        text-align: center;
+
+        flex-direction: column;
+
+        padding: 70px 25px;
+
+    }
+
+    .hero-buttons {
+
+        justify-content: center;
+
+    }
+
+    .mascot {
+
+        width: 300px;
+
+        height: 300px;
+
+        margin-top: 40px;
+
+    }
+
+    .mascot-circle {
+
+        width: 260px;
+
+        height: 260px;
+
+        font-size: 140px;
+
+    }
+
+    .about {
+
+        grid-template-columns: 1fr;
+
+        gap: 50px;
+
+    }
+
+    .specialty-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .menu-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .delivery-container {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .cart {
+
+        position: static;
+
+    }
+
+    .delivery-info-section {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .logo h1 {
+
+        font-size: 20px;
+
+    }
+
+    .logo-arara {
+
+        font-size: 32px;
+
+    }
+
+    .hero h2 {
+
+        font-size: 48px;
+
+    }
+
+    .about h2,
+    .section-title h2,
+    .page-header h2 {
+
+        font-size: 38px;
+
+    }
+
+    .about {
+
+        padding: 70px 20px;
+
+    }
+
+    .about-image {
+
+        height: 350px;
+
+    }
+
+    .image-placeholder {
+
+        box-shadow: 10px 10px 0 var(--green);
+
+    }
+
+    .cta {
+
+        margin: 50px 20px;
+
+        padding: 35px 25px;
+
+        flex-direction: column;
+
+        text-align: center;
+
+    }
+
+    .delivery-card {
+
+        align-items: flex-start;
+
+    }
+
+    .delivery-food {
+
+        width: 70px;
+
+        height: 70px;
+
+        min-width: 70px;
+
+        font-size: 35px;
+
+    }
+
+}
