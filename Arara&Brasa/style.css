@@ -91,11 +91,6 @@ button {
 }
 
 
-.logo-arara {
-
-    font-size: 42px;
-
-}
 
 
 .logo h1 {
@@ -481,8 +476,7 @@ nav a.active::after {
     height: 100%;
     
     object-fit: contain;
-    
-    mix-blend-mode: multiply;
+    display: block;
 
 }
 
@@ -649,6 +643,21 @@ nav a.active::after {
 .cta span {
 
     font-size: 40px;
+
+}
+
+
+.cta span img {
+
+    width: 1em;
+
+    height: 1em;
+
+    object-fit: contain;
+
+    display: inline-block;
+
+    vertical-align: middle;
 
 }
 
@@ -1063,9 +1072,17 @@ nav a.active::after {
 }
 
 
-.empty-cart:first-letter {
+.empty-cart > img {
 
-    font-size: 40px;
+    width: 40px;
+
+    height: 40px;
+
+    object-fit: contain;
+
+    display: inline-block;
+
+    vertical-align: middle;
 
 }
 
@@ -1223,6 +1240,21 @@ footer {
     font-size: 24px;
 
     margin-bottom: 10px;
+
+}
+
+
+.footer-logo img {
+
+    width: 1em;
+
+    height: 1em;
+
+    object-fit: contain;
+
+    display: inline-block;
+
+    vertical-align: middle;
 
 }
 
