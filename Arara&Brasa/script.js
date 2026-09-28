@@ -49,7 +49,7 @@ function updateCart() {
 
             <div class="empty-cart">
 
-                🦜
+                <img src="imgs/araraab.png" alt="Mascote Arara e Brasa">
 
                 <p>
                     Seu carrinho está vazio.
