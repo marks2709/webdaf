@@ -26,7 +26,7 @@
 
     --gray: #6e716b;
 
-    --light-gray: #eee9dc;
+    --light-gray: #eee9dc
 
 }
 
@@ -59,7 +59,7 @@ button {
 
     height: 82px;
 
-    background: var(--green);
+    background: var(--green-dark);
 
     color: white;
 
@@ -934,6 +934,20 @@ nav a.active::after {
     justify-content: center;
 
     font-size: 50px;
+
+}
+
+.delivery-food img {
+
+    width: 100%;
+    
+    height: 100%;
+    
+    object-fit: cover;
+    
+    display: block;
+    
+    border-radius: 12px;
 
 }
 
