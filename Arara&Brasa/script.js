@@ -1,124 +1,176 @@
 function toggleMenu() {
+
     const menu = document.getElementById("menu");
 
     if (menu) {
+
         menu.classList.toggle("open");
+
     }
+
 }
 
-let cart = JSON.parse(localStorage.getItem("araraCart") || "[]");
+
+let cart = [];
+
 
 function addToCart(name, price) {
+
     cart.push({
         name: name,
-        price: Number(price)
+        price: price
     });
 
-    localStorage.setItem("araraCart", JSON.stringify(cart));
     updateCart();
+
 }
 
+
 function updateCart() {
+
     const cartItems = document.getElementById("cart-items");
+
     const cartCount = document.getElementById("cart-count");
+
     const cartTotal = document.getElementById("cart-total");
 
-    if (cartCount) {
-        cartCount.textContent = cart.length;
-    }
-
-    const total = cart.reduce(
-        (sum, item) => sum + Number(item.price || 0),
-        0
-    );
-
-    if (cartTotal) {
-        cartTotal.textContent =
-            "R$ " + total.toFixed(2).replace(".", ",");
-    }
 
     if (!cartItems) {
         return;
     }
 
+
+    cartCount.textContent = cart.length;
+
+
     if (cart.length === 0) {
+
         cartItems.innerHTML = `
+
             <div class="empty-cart">
-                <img src="imgs/araraab.png" alt="Mascote Arara e Brasa">
-                <p>Seu carrinho está vazio.</p>
-                <small>Adicione algum prato para começar.</small>
+
+                <p>
+                    Seu carrinho está vazio.
+                </p>
+
+                <small>
+                    Adicione algum prato para começar.
+                </small>
+
             </div>
+
         `;
+
+        cartTotal.textContent = "R$ 0,00";
+
         return;
+
     }
+
 
     cartItems.innerHTML = "";
 
+
+    let total = 0;
+
+
     cart.forEach((item, index) => {
+
+        total += item.price;
+
+
         const div = document.createElement("div");
+
         div.classList.add("cart-item");
 
-        const info = document.createElement("div");
 
-        const nome = document.createElement("h4");
-        nome.textContent = item.name;
+        div.innerHTML = `
 
-        const preco = document.createElement("small");
-        preco.textContent =
-            "R$ " + Number(item.price).toFixed(2).replace(".", ",");
+            <div>
 
-        info.appendChild(nome);
-        info.appendChild(preco);
+                <h4>${item.name}</h4>
 
-        const remover = document.createElement("button");
-        remover.classList.add("remove-item");
-        remover.type = "button";
-        remover.textContent = "✕";
-        remover.setAttribute("aria-label", "Remover " + item.name);
+                <small>
+                    R$ ${item.price.toFixed(2).replace(".", ",")}
+                </small>
 
-        remover.addEventListener("click", () => removeFromCart(index));
+            </div>
 
-        div.appendChild(info);
-        div.appendChild(remover);
+            <button
+                class="remove-item"
+                onclick="removeFromCart(${index})">
+
+                ✕
+
+            </button>
+
+        `;
+
+
         cartItems.appendChild(div);
+
     });
+
+
+    cartTotal.textContent =
+        "R$ " +
+        total.toFixed(2).replace(".", ",");
+
 }
+
 
 function removeFromCart(index) {
+
     cart.splice(index, 1);
 
-    localStorage.setItem("araraCart", JSON.stringify(cart));
     updateCart();
+
 }
 
+
 function finishOrder() {
+
     if (cart.length === 0) {
-        alert("Seu carrinho está vazio! Adicione algum prato.");
+
+        alert(
+            "Seu carrinho está vazio! Adicione algum prato."
+        );
+
         return;
+
     }
+
 
     let message =
         "Olá! Gostaria de fazer um pedido no Arara & Brasa:%0A%0A";
 
+
     let total = 0;
 
+
     cart.forEach((item) => {
+
         message +=
             "• " +
             item.name +
             " - R$ " +
-            Number(item.price).toFixed(2).replace(".", ",") +
+            item.price.toFixed(2).replace(".", ",") +
             "%0A";
 
-        total += Number(item.price);
+        total += item.price;
+
     });
+
 
     message +=
         "%0A*Total: R$ " +
         total.toFixed(2).replace(".", ",") +
         "*";
 
-    const phone = "5511999999999";
+
+    const phone =
+        "5511999999999";
+
 
     const url =
         "https://wa.me/" +
@@ -126,110 +178,109 @@ function finishOrder() {
         "?text=" +
         message;
 
+
     window.open(url, "_blank");
+
 }
 
-const observer = new IntersectionObserver(
-    (entries) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateY(0)";
-            }
+const observer =
+    new IntersectionObserver(
+
+        (entries) => {
+
+            entries.forEach((entry) => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.style.opacity = "1";
+
+                    entry.target.style.transform =
+                        "translateY(0)";
+
+                }
+
+            });
+
+        },
+
+        {
+            threshold: 0.15
+        }
+
+    );
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const elements =
+            document.querySelectorAll(
+                ".specialty-card, .menu-item, .delivery-card"
+            );
+
+
+        elements.forEach((element) => {
+
+            element.style.opacity = "0";
+
+            element.style.transform =
+                "translateY(20px)";
+
+            element.style.transition =
+                "all .5s ease";
+
+
+            observer.observe(element);
+
         });
-    },
-    {
-        threshold: 0.15
+
     }
 );
 
+// Pop-ups do cardápio com informações nutricionais estimadas
 document.addEventListener("DOMContentLoaded", () => {
-    const elements = document.querySelectorAll(
-        ".specialty-card, .menu-item, .delivery-card"
-    );
+    const modal = document.getElementById("produto-modal");
+    if (!modal) return;
 
-    elements.forEach((element) => {
-        element.style.opacity = "0";
-        element.style.transform = "translateY(20px)";
-        element.style.transition = "all .5s ease";
+    const campos = {
+        kcal: document.getElementById("nutri-kcal"),
+        proteina: document.getElementById("nutri-proteina"),
+        carboidratos: document.getElementById("nutri-carboidratos"),
+        gorduras: document.getElementById("nutri-gorduras"),
+        fibras: document.getElementById("nutri-fibras"),
+        sodio: document.getElementById("nutri-sodio")
+    };
+    let produtoAtual = null;
 
-        observer.observe(element);
-    });
-});
-
-const modal = document.getElementById("produto-modal");
-const modalImagem = document.getElementById("modal-imagem");
-const modalNome = document.getElementById("modal-nome");
-const modalDescricao = document.getElementById("modal-descricao");
-const modalPreco = document.getElementById("modal-preco");
-const botaoFechar = document.getElementById("modal-fechar");
-const botaoAdicionar = document.getElementById("modal-adicionar");
-
-if (
-    modal &&
-    modalImagem &&
-    modalNome &&
-    modalDescricao &&
-    modalPreco &&
-    botaoFechar &&
-    botaoAdicionar
-) {
-    document.querySelectorAll(".menu-item[data-nome]").forEach((card) => {
-        card.addEventListener("click", () => {
-            modalNome.textContent = card.dataset.nome;
-            modalDescricao.textContent = card.dataset.descricao;
-            modalPreco.textContent = card.dataset.preco;
-            modalImagem.src = card.dataset.imagem;
-            modalImagem.alt = card.dataset.nome;
-
-            botaoAdicionar.textContent = "🛒 Adicionar ao carrinho";
-            botaoAdicionar.style.backgroundColor = "#164832";
-
+    document.querySelectorAll(".menu-item[data-nome]").forEach((item) => {
+        item.addEventListener("click", () => {
+            produtoAtual = item;
+            document.getElementById("modal-nome").textContent = item.dataset.nome || "";
+            document.getElementById("modal-descricao").textContent = item.dataset.descricao || "";
+            document.getElementById("modal-preco").textContent = item.dataset.preco || "";
+            const imagem = document.getElementById("modal-imagem");
+            imagem.src = item.dataset.imagem || "";
+            imagem.alt = item.dataset.nome || "Imagem do prato";
+            campos.kcal.textContent = `${item.dataset.kcal || "—"} kcal`;
+            campos.proteina.textContent = `${item.dataset.proteina || "—"} g`;
+            campos.carboidratos.textContent = `${item.dataset.carboidratos || "—"} g`;
+            campos.gorduras.textContent = `${item.dataset.gorduras || "—"} g`;
+            campos.fibras.textContent = `${item.dataset.fibras || "—"} g`;
+            campos.sodio.textContent = `${item.dataset.sodio || "—"} mg`;
             modal.classList.add("active");
             modal.setAttribute("aria-hidden", "false");
-            document.body.style.overflow = "hidden";
-
-            botaoFechar.focus();
         });
     });
 
-    function fecharModal() {
-        modal.classList.remove("active");
-        modal.setAttribute("aria-hidden", "true");
-        document.body.style.overflow = "";
-    }
-
-    botaoFechar.addEventListener("click", fecharModal);
-
-    modal.addEventListener("click", (event) => {
-        if (event.target === modal) {
-            fecharModal();
-        }
+    const fechar = () => { modal.classList.remove("active"); modal.setAttribute("aria-hidden", "true"); };
+    document.getElementById("modal-fechar")?.addEventListener("click", fechar);
+    modal.addEventListener("click", (event) => { if (event.target === modal) fechar(); });
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape") fechar(); });
+    document.getElementById("modal-adicionar")?.addEventListener("click", () => {
+        if (!produtoAtual) return;
+        const preco = Number((produtoAtual.dataset.preco || "").replace("R$", "").replace(/\./g, "").replace(",", ".").trim());
+        addToCart(produtoAtual.dataset.nome, preco);
+        fechar();
     });
-
-    document.addEventListener("keydown", (event) => {
-        if (
-            event.key === "Escape" &&
-            modal.classList.contains("active")
-        ) {
-            fecharModal();
-        }
-    });
-
-    botaoAdicionar.addEventListener("click", () => {
-        const nome = modalNome.textContent;
-
-        const preco = Number(
-            modalPreco.textContent
-                .replace(/[^\d,]/g, "")
-                .replace(",", ".")
-        );
-
-        addToCart(nome, preco);
-
-        botaoAdicionar.textContent = "✓ Adicionado ao carrinho";
-        botaoAdicionar.style.backgroundColor = "#e87528";
-    });
-}
-
-updateCart();
+});
