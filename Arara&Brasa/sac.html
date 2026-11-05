@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Central de Atendimento ao Cliente do restaurante Arara e Brasa.">
+    <title>SAC | Arara e Brasa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .sac-intro { max-width: 760px; margin: 0 auto; }
+        .sac-content { max-width: 1100px; margin: 0 auto; padding: 65px 20px 80px; }
+        .sac-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr); gap: 30px; align-items: start; }
+        .sac-panel, .sac-info-card, .faq-item { background: var(--white); border: 1px solid var(--light-gray); border-radius: 16px; box-shadow: 0 8px 24px rgba(12,48,32,.06); }
+        .sac-panel { padding: 32px; }
+        .sac-panel h2, .sac-info-card h2, .faq-section h2 { color: var(--green); margin-bottom: 10px; }
+        .sac-lead { color: var(--gray); margin-bottom: 25px; }
+        .sac-form { display: grid; gap: 17px; }
+        .sac-form label { display: block; font-weight: 600; margin-bottom: 6px; }
+        .sac-form input, .sac-form select, .sac-form textarea { width: 100%; padding: 13px 14px; border: 1px solid #d8d8d0; border-radius: 8px; background: #fff; color: var(--dark); font: inherit; }
+        .sac-form input:focus, .sac-form select:focus, .sac-form textarea:focus { outline: 2px solid var(--yellow); border-color: var(--green); }
+        .sac-form textarea { min-height: 140px; resize: vertical; }
+        .sac-form .btn { border: 0; cursor: pointer; justify-self: start; }
+        .sac-note { font-size: 13px; color: var(--gray); margin-top: 12px; }
+        .sac-feedback { display: none; padding: 13px 15px; border-radius: 8px; background: #e8f3e9; color: #164832; }
+        .sac-feedback.visible { display: block; }
+        .sac-info { display: grid; gap: 18px; }
+        .sac-info-card { padding: 25px; }
+        .sac-info-card p { color: var(--gray); }
+        .sac-info-card strong { color: var(--dark); }
+        .faq-section { margin-top: 55px; }
+        .faq-section > p { color: var(--gray); margin-bottom: 20px; }
+        .faq-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+        .faq-item { padding: 22px; }
+        .faq-item h3 { color: var(--green); font-size: 17px; margin-bottom: 8px; }
+        .faq-item p { color: var(--gray); }
+        @media (max-width: 760px) { .sac-grid, .faq-list { grid-template-columns: 1fr; } .sac-panel { padding: 23px; } }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">
+        <div class="logo-arara"><img src="imgs/araradef.jpeg" alt="Mascote Arara e Brasa"></div>
+        <div><h1>Arara <span>&</span> Brasa</h1><small>Sabores do Brasil</small></div>
+    </div>
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
+    <nav id="menu">
+        <a href="index.html">Início</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="delivery.html">Delivery</a>
+        <a href="sac.html" class="active" aria-current="page">Atendimento</a>
+    </nav>
+</header>
+<main>
+    <section class="page-header">
+        <div class="sac-intro">
+            <span class="section-label">CENTRAL DE RELACIONAMENTO</span>
+            <h2>Serviço de <span>Atendimento</span></h2>
+            <p>Teve algum problema com seu pedido ou deseja enviar uma sugestão? Utilize este canal para registrar sua solicitação.</p>
+        </div>
+    </section>
+
+    <section class="sac-content">
+        <div class="sac-grid">
+            <div class="sac-panel">
+                <h2>Envie sua solicitação</h2>
+                <p class="sac-lead">Preencha os campos abaixo com os dados necessários para entendermos o ocorrido.</p>
+                <form class="sac-form" id="sac-form">
+                    <div>
+                        <label for="nome">Nome completo</label>
+                        <input type="text" id="nome" name="nome" autocomplete="name" required>
+                    </div>
+                    <div>
+                        <label for="email">E-mail para contato</label>
+                        <input type="email" id="email" name="email" autocomplete="email" required>
+                    </div>
+                    <div>
+                        <label for="pedido">Número do pedido (se houver)</label>
+                        <input type="text" id="pedido" name="pedido" placeholder="Ex.: 1025">
+                    </div>
+                    <div>
+                        <label for="assunto">Motivo do contato</label>
+                        <select id="assunto" name="assunto" required>
+                            <option value="">Selecione uma opção</option>
+                            <option>Problema com o pedido</option>
+                            <option>Atraso na entrega</option>
+                            <option>Produto incorreto ou faltando</option>
+                            <option>Qualidade do produto</option>
+                            <option>Dúvida sobre o cardápio</option>
+                            <option>Elogio ou sugestão</option>
+                            <option>Outro assunto</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="mensagem">Descreva sua solicitação</label>
+                        <textarea id="mensagem" name="mensagem" placeholder="Conte o que aconteceu e informe os detalhes relevantes." required></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Enviar solicitação pelo WhatsApp</button>
+                    <p class="sac-note">Ao clicar, o WhatsApp será aberto com uma mensagem contendo os dados preenchidos. Revise o texto e toque em enviar no aplicativo.</p>
+                    <div class="sac-feedback" id="sac-feedback" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+
+            <aside class="sac-info">
+                <div class="sac-info-card">
+                    <h2>Como podemos ajudar?</h2>
+                    <p>Selecione o assunto mais próximo da sua necessidade e descreva a situação com clareza. Se o contato for sobre um pedido, informe o número correspondente.</p>
+                </div>
+                <div class="sac-info-card">
+                    <h2>Antes de enviar</h2>
+                    <p>Confira se o e-mail foi digitado corretamente e se a descrição contém as informações necessárias para identificar o problema.</p>
+                </div>
+                <div class="sac-info-card">
+                    <h2>Atendimento</h2>
+                    <p>Este canal foi criado para centralizar dúvidas, reclamações, elogios e sugestões relacionadas à experiência no Arara e Brasa.</p>
+                </div>
+            </aside>
+        </div>
+
+        <section class="faq-section">
+            <h2>Dúvidas frequentes</h2>
+            <p>Confira algumas orientações que podem ajudar antes de registrar sua solicitação.</p>
+            <div class="faq-list">
+                <article class="faq-item">
+                    <h3>Meu pedido está atrasado. O que devo informar?</h3>
+                    <p>Informe o número do pedido, o horário aproximado da compra e o endereço ou região de entrega, se necessário.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Recebi um produto diferente do solicitado.</h3>
+                    <p>Descreva qual item foi solicitado e qual foi recebido. O número do pedido também ajuda na identificação.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Como faço uma sugestão ou elogio?</h3>
+                    <p>Selecione a opção correspondente no formulário e compartilhe sua experiência ou ideia.</p>
+                </article>
+                <article class="faq-item">
+                    <h3>Preciso informar o número do pedido?</h3>
+                    <p>Esse campo é opcional, mas seu preenchimento é recomendado quando a solicitação estiver relacionada a uma compra.</p>
+                </article>
+            </div>
+        </section>
+    </section>
+</main>
+<footer>
+    <div class="footer-logo"><strong>Arara & Brasa</strong></div>
+    <p>Sabores do Brasil feitos na brasa.</p>
+    <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="delivery.html">Delivery</a>
+        <a href="sac.html">Atendimento</a>
+    </div>
+    <p class="copyright">© 2026 Arara & Brasa.</p>
+</footer>
+<script src="script.js"></script>
+<script>
+    document.getElementById('sac-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const nome = document.getElementById('nome').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const pedido = document.getElementById('pedido').value.trim() || 'Não informado';
+        const assunto = document.getElementById('assunto').value;
+        const mensagem = document.getElementById('mensagem').value.trim();
+
+        // Mesmo número padrão já utilizado na finalização do delivery.
+        const telefoneAtendimento = '5511999999999';
+
+        const texto = [
+            '*SOLICITAÇÃO DE ATENDIMENTO - ARARA E BRASA*',
+            '',
+            '*Nome:* ' + nome,
+            '*E-mail:* ' + email,
+            '*Número do pedido:* ' + pedido,
+            '*Motivo do contato:* ' + assunto,
+            '',
+            '*Descrição da solicitação:*',
+            mensagem
+        ].join('\n');
+
+        const url = 'https://wa.me/' + telefoneAtendimento + '?text=' + encodeURIComponent(texto);
+        window.open(url, '_blank', 'noopener,noreferrer');
+
+        const feedback = document.getElementById('sac-feedback');
+        feedback.textContent = 'O WhatsApp foi aberto com sua solicitação preenchida. Confira a mensagem e toque em Enviar para concluir o atendimento.';
+        feedback.classList.add('visible');
+    });
+</script>
+</body>
+</html>
