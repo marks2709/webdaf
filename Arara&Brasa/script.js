@@ -1,286 +1,273 @@
 function toggleMenu() {
+    const menu = document.getElementById('menu');
+    if (menu) menu.classList.toggle('open');
+}
 
-    const menu = document.getElementById("menu");
+let carrinho = [];
 
-    if (menu) {
+function salvarCarrinho() {
+    try {
+        localStorage.setItem('araraCarrinho', JSON.stringify(carrinho));
+    } catch (e) {}
+}
 
-        menu.classList.toggle("open");
-
+function carregarCarrinho() {
+    try {
+        const raw = localStorage.getItem('araraCarrinho');
+        if (raw) carrinho = JSON.parse(raw) || [];
+    } catch (e) {
+        carrinho = [];
     }
-
 }
 
-
-let cart = [];
-
-
-function addToCart(name, price) {
-
-    cart.push({
-        name: name,
-        price: price
-    });
-
-    updateCart();
-
+function formatarPreco(valor) {
+    return 'R$ ' + valor.toFixed(2).replace('.', ',');
 }
 
-
-function updateCart() {
-
-    const cartItems = document.getElementById("cart-items");
-
-    const cartCount = document.getElementById("cart-count");
-
-    const cartTotal = document.getElementById("cart-total");
-
-
-    if (!cartItems) {
-        return;
-    }
-
-
-    cartCount.textContent = cart.length;
-
-
-    if (cart.length === 0) {
-
-        cartItems.innerHTML = `
-
-            <div class="empty-cart">
-
-                <p>
-                    Seu carrinho está vazio.
-                </p>
-
-                <small>
-                    Adicione algum prato para começar.
-                </small>
-
-            </div>
-
-        `;
-
-        cartTotal.textContent = "R$ 0,00";
-
-        return;
-
-    }
-
-
-    cartItems.innerHTML = "";
-
-
-    let total = 0;
-
-
-    cart.forEach((item, index) => {
-
-        total += item.price;
-
-
-        const div = document.createElement("div");
-
-        div.classList.add("cart-item");
-
-
-        div.innerHTML = `
-
-            <div>
-
-                <h4>${item.name}</h4>
-
-                <small>
-                    R$ ${item.price.toFixed(2).replace(".", ",")}
-                </small>
-
-            </div>
-
-            <button
-                class="remove-item"
-                onclick="removeFromCart(${index})">
-
-                ✕
-
-            </button>
-
-        `;
-
-
-        cartItems.appendChild(div);
-
-    });
-
-
-    cartTotal.textContent =
-        "R$ " +
-        total.toFixed(2).replace(".", ",");
-
+function normalizarObservacao(obs) {
+    return (obs || '').trim();
 }
 
-
-function removeFromCart(index) {
-
-    cart.splice(index, 1);
-
-    updateCart();
-
-}
-
-
-function finishOrder() {
-
-    if (cart.length === 0) {
-
-        alert(
-            "Seu carrinho está vazio! Adicione algum prato."
-        );
-
-        return;
-
-    }
-
-
-    let message =
-        "Olá! Gostaria de fazer um pedido no Arara & Brasa:%0A%0A";
-
-
-    let total = 0;
-
-
-    cart.forEach((item) => {
-
-        message +=
-            "• " +
-            item.name +
-            " - R$ " +
-            item.price.toFixed(2).replace(".", ",") +
-            "%0A";
-
-        total += item.price;
-
-    });
-
-
-    message +=
-        "%0A*Total: R$ " +
-        total.toFixed(2).replace(".", ",") +
-        "*";
-
-
-    const phone =
-        "5511999999999";
-
-
-    const url =
-        "https://wa.me/" +
-        phone +
-        "?text=" +
-        message;
-
-
-    window.open(url, "_blank");
-
-}
-
-const observer =
-    new IntersectionObserver(
-
-        (entries) => {
-
-            entries.forEach((entry) => {
-
-                if (entry.isIntersecting) {
-
-                    entry.target.style.opacity = "1";
-
-                    entry.target.style.transform =
-                        "translateY(0)";
-
-                }
-
-            });
-
-        },
-
-        {
-            threshold: 0.15
-        }
-
+function adicionarAoCarrinho(nome, preco, observacao) {
+    const obs = normalizarObservacao(observacao);
+    const existente = carrinho.find(
+        item => item.nome === nome && item.observacao === obs
     );
 
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        const elements =
-            document.querySelectorAll(
-                ".specialty-card, .menu-item, .delivery-card"
-            );
-
-
-        elements.forEach((element) => {
-
-            element.style.opacity = "0";
-
-            element.style.transform =
-                "translateY(20px)";
-
-            element.style.transition =
-                "all .5s ease";
-
-
-            observer.observe(element);
-
+    if (existente) {
+        existente.quantidade += 1;
+    } else {
+        carrinho.push({
+            nome,
+            preco: Number(preco),
+            quantidade: 1,
+            observacao: obs
         });
-
     }
-);
 
-// Pop-ups do cardápio com informações nutricionais estimadas
-document.addEventListener("DOMContentLoaded", () => {
-    const modal = document.getElementById("produto-modal");
+    salvarCarrinho();
+    renderizarCarrinho();
+}
+
+function addToCart(nome, preco) {
+    adicionarAoCarrinho(nome, preco, '');
+}
+
+function renderizarCarrinho() {
+    const container = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    const countEl = document.getElementById('cart-count');
+
+    if (!container) return;
+
+    const totalItens = carrinho.reduce((acc, i) => acc + i.quantidade, 0);
+    if (countEl) countEl.textContent = totalItens;
+
+    if (carrinho.length === 0) {
+        container.innerHTML = `
+            <div class="empty-cart">
+                <img src="imgs/araraab.png" alt="Mascote Arara e Brasa">
+                <p>Seu carrinho está vazio.</p>
+                <small>Adicione algum prato para começar.</small>
+            </div>`;
+        if (totalEl) totalEl.textContent = formatarPreco(0);
+        return;
+    }
+
+    let html = '';
+    let total = 0;
+
+    carrinho.forEach((item, index) => {
+        const subtotal = item.preco * item.quantidade;
+        total += subtotal;
+
+        html += `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <strong class="cart-item-nome">${item.nome}</strong>
+                    ${item.observacao
+                        ? `<p class="cart-item-obs">📝 ${item.observacao}</p>`
+                        : ''}
+                    <span class="cart-item-preco">${formatarPreco(item.preco)} un.</span>
+                </div>
+
+                <div class="cart-item-controls">
+                    <button class="qty-btn" onclick="alterarQuantidade(${index}, -1)" aria-label="Remover um">−</button>
+                    <span class="qty-value">${item.quantidade}</span>
+                    <button class="qty-btn" onclick="alterarQuantidade(${index}, 1)" aria-label="Adicionar um">+</button>
+                    <button class="remove-btn" onclick="removerItem(${index})" aria-label="Remover item">🗑</button>
+                </div>
+
+                <div class="cart-item-subtotal">${formatarPreco(subtotal)}</div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+    if (totalEl) totalEl.textContent = formatarPreco(total);
+}
+
+function alterarQuantidade(index, delta) {
+    if (!carrinho[index]) return;
+    carrinho[index].quantidade += delta;
+    if (carrinho[index].quantidade <= 0) {
+        carrinho.splice(index, 1);
+    }
+    salvarCarrinho();
+    renderizarCarrinho();
+}
+
+function removerItem(index) {
+    carrinho.splice(index, 1);
+    salvarCarrinho();
+    renderizarCarrinho();
+}
+
+function finishOrder() {
+    if (carrinho.length === 0) {
+        alert('Seu carrinho está vazio. Adicione algum prato antes de finalizar.');
+        return;
+    }
+
+    const numeroWhats = '5511999999999';
+
+    let total = 0;
+    const linhas = [];
+
+    carrinho.forEach(item => {
+        const subtotal = item.preco * item.quantidade;
+        total += subtotal;
+
+        const obs = item.observacao ? ` (${item.observacao})` : '';
+        linhas.push(
+            `- ${item.quantidade}x ${item.nome}${obs} — ${formatarPreco(subtotal)}`
+        );
+    });
+
+    const mensagem =
+        `Olá, Arara & Brasa! 🦜🔥\n` +
+        `Gostaria de fazer o seguinte pedido:\n\n` +
+        linhas.join('\n') +
+        `\n\n*Total: ${formatarPreco(total)}*\n\n` +
+        `Aguardo a confirmação. Obrigado(a)!`;
+
+    const url = `https://wa.me/${numeroWhats}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, '_blank');
+}
+
+let produtoAtual = null;
+
+function abrirModal(item) {
+    const modal = document.getElementById('produto-modal');
     if (!modal) return;
 
-    const campos = {
-        kcal: document.getElementById("nutri-kcal"),
-        proteina: document.getElementById("nutri-proteina"),
-        carboidratos: document.getElementById("nutri-carboidratos"),
-        gorduras: document.getElementById("nutri-gorduras"),
-        fibras: document.getElementById("nutri-fibras"),
-        sodio: document.getElementById("nutri-sodio")
+    produtoAtual = {
+        nome: item.dataset.nome,
+        preco: parseFloat(
+            (item.dataset.preco || '0')
+                .replace('R$', '')
+                .replace(/\./g, '')
+                .replace(',', '.')
+                .trim()
+        ),
+        descricao: item.dataset.descricao,
+        imagem: item.dataset.imagem
     };
-    let produtoAtual = null;
 
-    document.querySelectorAll(".menu-item[data-nome]").forEach((item) => {
-        item.addEventListener("click", () => {
-            produtoAtual = item;
-            document.getElementById("modal-nome").textContent = item.dataset.nome || "";
-            document.getElementById("modal-descricao").textContent = item.dataset.descricao || "";
-            document.getElementById("modal-preco").textContent = item.dataset.preco || "";
-            const imagem = document.getElementById("modal-imagem");
-            imagem.src = item.dataset.imagem || "";
-            imagem.alt = item.dataset.nome || "Imagem do prato";
-            campos.kcal.textContent = `${item.dataset.kcal || "—"} kcal`;
-            campos.proteina.textContent = `${item.dataset.proteina || "—"} g`;
-            campos.carboidratos.textContent = `${item.dataset.carboidratos || "—"} g`;
-            campos.gorduras.textContent = `${item.dataset.gorduras || "—"} g`;
-            campos.fibras.textContent = `${item.dataset.fibras || "—"} g`;
-            campos.sodio.textContent = `${item.dataset.sodio || "—"} mg`;
-            modal.classList.add("active");
-            modal.setAttribute("aria-hidden", "false");
+    document.getElementById('modal-imagem').src = produtoAtual.imagem;
+    document.getElementById('modal-imagem').alt = produtoAtual.nome;
+    document.getElementById('modal-nome').textContent = produtoAtual.nome;
+    document.getElementById('modal-descricao').textContent = produtoAtual.descricao;
+    document.getElementById('modal-preco').textContent = item.dataset.preco;
+
+    const mapa = {
+        'nutri-kcal': 'kcal',
+        'nutri-proteina': 'proteina',
+        'nutri-carboidratos': 'carboidratos',
+        'nutri-gorduras': 'gorduras',
+        'nutri-fibras': 'fibras',
+        'nutri-sodio': 'sodio'
+    };
+
+    Object.entries(mapa).forEach(([idEl, chave]) => {
+        const el = document.getElementById(idEl);
+        if (!el) return;
+        const valor = item.dataset[chave];
+        if (chave === 'kcal') el.textContent = valor ? `${valor} kcal` : '—';
+        else if (chave === 'sodio') el.textContent = valor ? `${valor} mg` : '—';
+        else el.textContent = valor ? `${valor} g` : '—';
+    });
+
+    const obsEl = document.getElementById('modal-observacao');
+    if (obsEl) obsEl.value = '';
+
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+}
+
+function fecharModal() {
+    const modal = document.getElementById('produto-modal');
+    if (!modal) return;
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    produtoAtual = null;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    carregarCarrinho();
+    renderizarCarrinho();
+
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', () => abrirModal(item));
+    });
+
+    const btnFechar = document.getElementById('modal-fechar');
+    if (btnFechar) btnFechar.addEventListener('click', fecharModal);
+
+    const modal = document.getElementById('produto-modal');
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) fecharModal();
         });
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') fecharModal();
     });
 
-    const fechar = () => { modal.classList.remove("active"); modal.setAttribute("aria-hidden", "true"); };
-    document.getElementById("modal-fechar")?.addEventListener("click", fechar);
-    modal.addEventListener("click", (event) => { if (event.target === modal) fechar(); });
-    document.addEventListener("keydown", (event) => { if (event.key === "Escape") fechar(); });
-    document.getElementById("modal-adicionar")?.addEventListener("click", () => {
-        if (!produtoAtual) return;
-        const preco = Number((produtoAtual.dataset.preco || "").replace("R$", "").replace(/\./g, "").replace(",", ".").trim());
-        addToCart(produtoAtual.dataset.nome, preco);
-        fechar();
-    });
+    const btnAdd = document.getElementById('modal-adicionar');
+    if (btnAdd) {
+        btnAdd.addEventListener('click', () => {
+            if (!produtoAtual) return;
+
+            const obsEl = document.getElementById('modal-observacao');
+            const obs = obsEl ? obsEl.value : '';
+
+            adicionarAoCarrinho(produtoAtual.nome, produtoAtual.preco, obs);
+
+            btnAdd.textContent = '✅ Adicionado!';
+            setTimeout(() => {
+                btnAdd.textContent = '🛒 Adicionar ao carrinho';
+            }, 1200);
+
+            fecharModal();
+
+            if (!document.getElementById('cart-items')) {
+                mostrarToast(`${produtoAtual?.nome || 'Item'} adicionado ao carrinho!`);
+            }
+        });
+    }
 });
+
+function mostrarToast(msg) {
+    let toast = document.getElementById('toast-arara');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast-arara';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(() => toast.classList.remove('show'), 2500);
+}
