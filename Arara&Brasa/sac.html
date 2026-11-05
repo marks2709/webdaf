@@ -39,7 +39,7 @@
 <body>
 <header class="header">
     <div class="logo">
-        <div class="logo-arara"><img src="imgs/araradef.jpeg" alt="Mascote Arara e Brasa"></div>
+        <div class="logo-arara"><img src="imgs/araraab.png" alt="Mascote Arara e Brasa"></div>
         <div><h1>Arara <span>&</span> Brasa</h1><small>Sabores do Brasil</small></div>
     </div>
     <button class="menu-btn" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
@@ -141,7 +141,9 @@
     </section>
 </main>
 <footer>
-    <div class="footer-logo"><strong>Arara & Brasa</strong></div>
+    <div class="footer-logo">
+        <img src="imgs/araraab.png" alt="Mascote Arara e Brasa"> <strong>Arara & Brasa</strong>
+    </div>
     <p>Sabores do Brasil feitos na brasa.</p>
     <div class="footer-links">
         <a href="index.html">Início</a>
@@ -162,7 +164,6 @@
         const assunto = document.getElementById('assunto').value;
         const mensagem = document.getElementById('mensagem').value.trim();
 
-        // Mesmo número padrão já utilizado na finalização do delivery.
         const telefoneAtendimento = '5511999999999';
 
         const texto = [
