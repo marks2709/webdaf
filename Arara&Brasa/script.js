@@ -144,13 +144,13 @@ function finishOrder() {
         );
     });
 
-    const mensagem =
-        `Olá, Arara & Brasa! 🦜🔥\n` +
+        const mensagem =
+        `Olá, Arara & Brasa!\n` +
         `Gostaria de fazer o seguinte pedido:\n\n` +
         linhas.join('\n') +
         `\n\n*Total: ${formatarPreco(total)}*\n\n` +
         `Aguardo a confirmação. Obrigado(a)!`;
-
+        
     const url = `https://wa.me/${numeroWhats}?text=${encodeURIComponent(mensagem)}`;
     window.open(url, '_blank');
 }
