@@ -77,6 +77,22 @@
 
 <section class="menu-section">
 
+    <div class="menu-toolbar">
+        <div class="menu-busca">
+            <input type="text" id="menu-busca" placeholder="Buscar prato, ingrediente..." aria-label="Buscar no cardápio">
+        </div>
+        <div class="menu-filtros">
+            <button class="filtro-btn active" data-filtro="todos">Todos</button>
+            <button class="filtro-btn" data-filtro="carnes">Carnes na Brasa</button>
+            <button class="filtro-btn" data-filtro="pratos">Pratos Brasileiros</button>
+            <button class="filtro-btn" data-filtro="acompanhamentos">Acompanhamentos</button>
+            <button class="filtro-btn" data-filtro="sobremesas">Sobremesas</button>
+            <button class="filtro-btn btn-favoritos" data-filtro="favoritos" id="btn-favoritos">🤍 Favoritos</button>
+        </div>
+    </div>
+
+    <div class="menu-category">
+
     <div class="menu-category">
 
         <h2>Carnes na Brasa</h2>
@@ -478,6 +494,12 @@
         </div>
 
     </div>
+
+        <p class="sem-resultados" id="sem-resultados" style="display: none;">
+        Nenhum prato encontrado com esse filtro. Tente outro termo!
+    </p>
+
+</section>
 
 </section>
 
