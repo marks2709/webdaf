@@ -110,6 +110,7 @@ function renderizarCarrinho() {
 
     container.innerHTML = html;
     if (totalEl) totalEl.textContent = formatarPreco(total);
+    renderizarUpsell();
 }
 
 function alterarQuantidade(index, delta) {
@@ -254,18 +255,244 @@ function criarBotaoCarrinho() {
     atualizarBotaoCarrinho();
 }
 
+/* ===== MODO ESCURO ===== */
+function carregarTema() {
+    try {
+        const tema = localStorage.getItem('araraTema');
+        if (tema === 'dark') {
+            document.body.classList.add('dark-mode');
+        }
+    } catch (e) {}
+}
+
+function toggleTema() {
+    document.body.classList.toggle('dark-mode');
+    try {
+        localStorage.setItem('araraTema',
+            document.body.classList.contains('dark-mode') ? 'dark' : 'light'
+        );
+    } catch (e) {}
+    atualizarIconeTema();
+}
+
+function atualizarIconeTema() {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+}
+
+function criarBotaoTema() {
+    const header = document.querySelector('.header');
+    if (!header) return;
+    if (document.getElementById('theme-toggle')) return;
+
+    const btn = document.createElement('button');
+    btn.id = 'theme-toggle';
+    btn.className = 'theme-toggle';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Alternar modo escuro');
+    btn.onclick = toggleTema;
+    header.appendChild(btn);
+    atualizarIconeTema();
+}
+
+/* ===== FAVORITOS ===== */
+let favoritos = [];
+
+function carregarFavoritos() {
+    try {
+        const raw = localStorage.getItem('araraFavoritos');
+        if (raw) favoritos = JSON.parse(raw) || [];
+    } catch (e) {
+        favoritos = [];
+    }
+}
+
+function salvarFavoritos() {
+    try {
+        localStorage.setItem('araraFavoritos', JSON.stringify(favoritos));
+    } catch (e) {}
+}
+
+function toggleFavorito(nome) {
+    const idx = favoritos.indexOf(nome);
+    if (idx >= 0) {
+        favoritos.splice(idx, 1);
+    } else {
+        favoritos.push(nome);
+    }
+    salvarFavoritos();
+    atualizarBotoesFavorito();
+    filtrarCardapio();
+}
+
+function atualizarBotoesFavorito() {
+    document.querySelectorAll('.fav-btn').forEach(btn => {
+        const nome = btn.dataset.nome;
+        const ativo = favoritos.includes(nome);
+        btn.classList.toggle('favoritado', ativo);
+        btn.textContent = ativo ? '❤️' : '🤍';
+    });
+}
+
+function criarBotoesFavorito() {
+    document.querySelectorAll('.menu-item').forEach(item => {
+        if (item.querySelector('.fav-btn')) return;
+        const nome = item.dataset.nome;
+        if (!nome) return;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'fav-btn';
+        btn.dataset.nome = nome;
+        btn.setAttribute('aria-label', 'Adicionar aos favoritos');
+        btn.textContent = favoritos.includes(nome) ? '❤️' : '🤍';
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            toggleFavorito(nome);
+        };
+        item.appendChild(btn);
+    });
+}
+
+/* ===== BUSCA + FILTRO ===== */
+let filtroAtual = 'todos';
+let somenteFavoritos = false;
+
+function filtrarCardapio() {
+    const buscaInput = document.getElementById('menu-busca');
+    const termo = (buscaInput ? buscaInput.value : '').toLowerCase().trim();
+
+    const categorias = document.querySelectorAll('.menu-category');
+    let totalVisivel = 0;
+
+    categorias.forEach(cat => {
+        const titulo = cat.querySelector('h2')?.textContent.trim() || '';
+        const catKey = titulo.toLowerCase();
+
+        const correspondeFiltro =
+            filtroAtual === 'todos' ||
+            catKey.includes(filtroAtual);
+
+        const itens = cat.querySelectorAll('.menu-item');
+        let visiveisNaCat = 0;
+
+        itens.forEach(item => {
+            const nome = (item.dataset.nome || '').toLowerCase();
+            const desc = (item.dataset.descricao || '').toLowerCase();
+            const nomeOriginal = item.dataset.nome || '';
+
+            const bateBusca = !termo || nome.includes(termo) || desc.includes(termo);
+            const bateFiltro = correspondeFiltro;
+            const bateFavorito = !somenteFavoritos || favoritos.includes(nomeOriginal);
+
+            const visivel = bateBusca && bateFiltro && bateFavorito;
+            item.classList.toggle('hidden', !visivel);
+            if (visivel) visiveisNaCat++;
+        });
+
+        cat.classList.toggle('hidden', visiveisNaCat === 0);
+        totalVisivel += visiveisNaCat;
+    });
+
+    const semResult = document.getElementById('sem-resultados');
+    if (semResult) {
+        semResult.style.display = totalVisivel === 0 ? 'block' : 'none';
+    }
+}
+
+function setupFiltros() {
+    const buscaInput = document.getElementById('menu-busca');
+    if (buscaInput) {
+        buscaInput.addEventListener('input', filtrarCardapio);
+    }
+
+    document.querySelectorAll('.filtro-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tipo = btn.dataset.filtro;
+
+            if (tipo === 'favoritos') {
+                somenteFavoritos = !somenteFavoritos;
+                btn.classList.toggle('ativo', somenteFavoritos);
+            } else {
+                filtroAtual = tipo;
+                document.querySelectorAll('.filtro-btn').forEach(b => {
+                    if (b.dataset.filtro !== 'favoritos') {
+                        b.classList.toggle('active', b.dataset.filtro === tipo);
+                    }
+                });
+            }
+
+            filtrarCardapio();
+        });
+    });
+}
+
+/* ===== UPSELL NO CARRINHO ===== */
+const sugestoes = [
+    { nome: 'Farofa da Casa', preco: 12.90, desc: 'Combina com carnes na brasa' },
+    { nome: 'Batata Frita', preco: 18.90, desc: 'Porção crocante e sequinha' },
+    { nome: 'Pudim da Casa', preco: 14.90, desc: 'Sobremesa cremosa' },
+    { nome: 'Cocada Cremosa', preco: 13.90, desc: 'Doce tradicional brasileiro' }
+];
+
+function renderizarUpsell() {
+    const cartFooter = document.querySelector('.cart-footer');
+    if (!cartFooter) return;
+
+    let upsellEl = document.getElementById('sugestao-upsell');
+    if (!upsellEl) {
+        upsellEl = document.createElement('div');
+        upsellEl.id = 'sugestao-upsell';
+        upsellEl.className = 'sugestao-upsell';
+        cartFooter.parentNode.insertBefore(upsellEl, cartFooter);
+    }
+
+    if (carrinho.length === 0) {
+        upsellEl.style.display = 'none';
+        return;
+    }
+
+    const nomesNoCarrinho = carrinho.map(i => i.nome);
+    const filtradas = sugestoes.filter(s => !nomesNoCarrinho.includes(s.nome)).slice(0, 2);
+
+    if (filtradas.length === 0) {
+        upsellEl.style.display = 'none';
+        return;
+    }
+
+    upsellEl.style.display = 'block';
+    upsellEl.innerHTML = '<strong>💡 Que tal adicionar?</strong>' +
+        filtradas.map(s => `
+            <div class="sugestao-upsell-item">
+                <p>${s.nome}<small>${s.desc}</small></p>
+                <button onclick="addToCart('${s.nome.replace(/'/g, "\\'")}', ${s.preco})">
+                    + ${formatarPreco(s.preco)}
+                </button>
+            </div>
+        `).join('');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    carregarTema();
+    criarBotaoTema();
+
     carregarCarrinho();
     renderizarCarrinho();
     criarBotaoCarrinho();
 
-    // Só registra o listener do modal se o modal existir na página
+    carregarFavoritos();
+    criarBotoesFavorito();
+    atualizarBotoesFavorito();
+
     const temModal = document.getElementById('produto-modal');
     if (temModal) {
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', () => abrirModal(item));
         });
     }
+
+    setupFiltros();
 
     const btnFechar = document.getElementById('modal-fechar');
     if (btnFechar) btnFechar.addEventListener('click', fecharModal);
@@ -309,6 +536,11 @@ document.addEventListener('DOMContentLoaded', () => {
             carregarCarrinho();
             renderizarCarrinho();
             atualizarBotaoCarrinho();
+            renderizarUpsell();
+        }
+        if (e.key === 'araraFavoritos') {
+            carregarFavoritos();
+            atualizarBotoesFavorito();
         }
     });
 });
