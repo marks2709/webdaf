@@ -51,9 +51,13 @@ function adicionarAoCarrinho(nome, preco, observacao) {
 }
 
 function addToCart(nome, preco) {
-    adicionarAoCarrinho(nome, preco, '');
+    try {
+        adicionarAoCarrinho(nome, preco, '');
+    } catch (e) {
+        console.error('Erro ao adicionar ao carrinho:', e);
+        alert('Erro ao adicionar item. Veja o console (F12).');
+    }
 }
-
 function renderizarCarrinho() {
     const container = document.getElementById('cart-items');
     const totalEl = document.getElementById('cart-total');
@@ -217,15 +221,19 @@ function fecharModal() {
 }
 
 function atualizarBotaoCarrinho() {
-    const btn = document.getElementById('cart-float');
-    if (!btn) return;
+    try {
+        const btn = document.getElementById('cart-float');
+        if (!btn) return;
 
-    const badge = btn.querySelector('.cart-badge');
-    if (!badge) return;
+        const badge = btn.querySelector('.cart-badge');
+        if (!badge) return;
 
-    const totalItens = carrinho.reduce((acc, i) => acc + i.quantidade, 0);
-    badge.textContent = totalItens > 0 ? totalItens : '';
-    badge.dataset.count = totalItens;
+        const totalItens = carrinho.reduce((acc, i) => acc + i.quantidade, 0);
+        badge.textContent = totalItens > 0 ? totalItens : '';
+        badge.dataset.count = totalItens;
+    } catch (e) {
+        console.warn('Erro ao atualizar botão do carrinho:', e);
+    }
 }
 
 function criarBotaoCarrinho() {
@@ -251,17 +259,20 @@ document.addEventListener('DOMContentLoaded', () => {
     renderizarCarrinho();
     criarBotaoCarrinho();
 
-    document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', () => abrirModal(item));
-    });
+    // Só registra o listener do modal se o modal existir na página
+    const temModal = document.getElementById('produto-modal');
+    if (temModal) {
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => abrirModal(item));
+        });
+    }
 
     const btnFechar = document.getElementById('modal-fechar');
     if (btnFechar) btnFechar.addEventListener('click', fecharModal);
 
-    const modal = document.getElementById('produto-modal');
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) fecharModal();
+    if (temModal) {
+        temModal.addEventListener('click', (e) => {
+            if (e.target === temModal) fecharModal();
         });
     }
 
@@ -291,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 mostrarToast(`${nomeAdicionado} adicionado ao carrinho!`);
             }
         });
-    });
+    }
 
     window.addEventListener('storage', (e) => {
         if (e.key === 'araraCarrinho') {

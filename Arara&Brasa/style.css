@@ -749,93 +749,65 @@ nav a.active::after {
 
 
 .menu-item {
-
     background: white;
-
     border-radius: 12px;
-
-    padding: 25px;
-
+    padding: 20px;
     display: flex;
-
-    gap: 20px;
-
+    gap: 18px;
+    align-items: center;
     border: 1px solid #eee;
-
     transition: .3s;
-
     cursor: pointer;
-
 }
-
 
 .menu-item:hover {
-
     transform: translateY(-4px);
-
     box-shadow: 0 10px 30px rgba(0,0,0,.08);
-
 }
 
-
-.food-icon {
-
-    width: 75px;
-
-    height: 75px;
-
-    min-width: 75px;
-
+.menu-item-imagem {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
     border-radius: 12px;
-
     background: #f4ead5;
-
+    overflow: hidden;
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    font-size: 38px;
-
 }
 
-.food-icon img {
-
-    width: 55px;
-
-    height: 55px;
-
+.menu-item-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     display: block;
+}
 
-    object-fit: contain;
+.menu-item-imagem {
+    width: 75px;
+    height: 75px;
+    min-width: 75px;
+}
 
+.food-info {
+    flex: 1;
+    min-width: 0;
 }
 
 .food-info h3 {
-
     margin-bottom: 5px;
-
 }
-
 
 .food-info p {
-
     color: var(--gray);
-
     font-size: 14px;
-
     margin-bottom: 10px;
-
 }
 
-
 .food-info strong {
-
     color: var(--orange);
-
     font-size: 18px;
-
 }
 
 

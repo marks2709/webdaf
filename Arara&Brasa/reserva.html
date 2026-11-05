@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Reserve sua mesa no restaurante Arara e Brasa.">
+    <title>Reserva de Mesa | Arara e Brasa</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .reserva-intro { max-width: 760px; margin: 0 auto; }
+        .reserva-content { max-width: 1100px; margin: 0 auto; padding: 65px 20px 80px; }
+        .reserva-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr); gap: 30px; align-items: start; }
+        .reserva-panel, .reserva-info-card { background: var(--white); border: 1px solid var(--light-gray); border-radius: 16px; box-shadow: 0 8px 24px rgba(12,48,32,.06); }
+        .reserva-panel { padding: 32px; }
+        .reserva-panel h2, .reserva-info-card h2 { color: var(--green); margin-bottom: 10px; }
+        .reserva-lead { color: var(--gray); margin-bottom: 25px; }
+        .reserva-form { display: grid; gap: 17px; }
+        .reserva-form label { display: block; font-weight: 600; margin-bottom: 6px; }
+        .reserva-form input, .reserva-form select, .reserva-form textarea { width: 100%; padding: 13px 14px; border: 1px solid #d8d8d0; border-radius: 8px; background: #fff; color: var(--dark); font: inherit; }
+        .reserva-form input:focus, .reserva-form select:focus, .reserva-form textarea:focus { outline: 2px solid var(--yellow); border-color: var(--green); }
+        .reserva-form textarea { min-height: 110px; resize: vertical; }
+        .reserva-form .btn { border: 0; cursor: pointer; justify-self: start; }
+        .reserva-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; }
+        .reserva-note { font-size: 13px; color: var(--gray); margin-top: 12px; }
+        .reserva-feedback { display: none; padding: 13px 15px; border-radius: 8px; background: #e8f3e9; color: #164832; }
+        .reserva-feedback.visible { display: block; }
+        .reserva-info { display: grid; gap: 18px; }
+        .reserva-info-card { padding: 25px; }
+        .reserva-info-card p { color: var(--gray); }
+        .reserva-info-card ul { margin: 8px 0 0 18px; color: var(--gray); }
+        .reserva-info-card li { margin-bottom: 6px; }
+        @media (max-width: 760px) {
+            .reserva-grid { grid-template-columns: 1fr; }
+            .reserva-form .form-row { grid-template-columns: 1fr; }
+            .reserva-panel { padding: 23px; }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="logo">
+        <div class="logo-arara"><img src="imgs/araraab.png" alt="Mascote Arara e Brasa"></div>
+        <div><h1>Arara <span>&</span> Brasa</h1><small>Sabores do Brasil</small></div>
+    </div>
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Abrir menu">☰</button>
+    <nav id="menu">
+        <a href="index.html">Início</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="delivery.html">Delivery</a>
+        <a href="reserva.html" class="active" aria-current="page">Reserva</a>
+        <a href="sac.html">Atendimento</a>
+    </nav>
+</header>
+<main>
+    <section class="page-header">
+        <div class="reserva-intro">
+            <span class="section-label">RESERVA DE MESA</span>
+            <h2>Garanta seu <span>lugar à mesa</span></h2>
+            <p>Reserve sua mesa no Arara & Brasa e venha viver uma experiência brasileira completa, do fogo à sobremesa.</p>
+        </div>
+    </section>
+
+    <section class="reserva-content">
+        <div class="reserva-grid">
+            <div class="reserva-panel">
+                <h2>Faça sua reserva</h2>
+                <p class="reserva-lead">Preencha os dados abaixo e enviaremos sua solicitação pelo WhatsApp. Confirmaremos a disponibilidade em seguida.</p>
+
+                <form class="reserva-form" id="reserva-form">
+                    <div>
+                        <label for="reserva-nome">Nome da reserva</label>
+                        <input type="text" id="reserva-nome" name="reserva-nome" autocomplete="name" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="reserva-pessoas">Quantidade de pessoas</label>
+                            <select id="reserva-pessoas" name="reserva-pessoas" required>
+                                <option value="">Selecione</option>
+                                <option value="1">1 pessoa</option>
+                                <option value="2">2 pessoas</option>
+                                <option value="3">3 pessoas</option>
+                                <option value="4">4 pessoas</option>
+                                <option value="5">5 pessoas</option>
+                                <option value="6">6 pessoas</option>
+                                <option value="7">7 pessoas</option>
+                                <option value="8">8 pessoas</option>
+                                <option value="9">9 pessoas</option>
+                                <option value="10">10 pessoas</option>
+                                <option value="10+">Mais de 10 pessoas</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="reserva-telefone">Telefone para contato</label>
+                            <input type="tel" id="reserva-telefone" name="reserva-telefone" placeholder="(11) 99999-9999" autocomplete="tel" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div>
+                            <label for="reserva-data">Data da reserva</label>
+                            <input type="date" id="reserva-data" name="reserva-data" required>
+                        </div>
+                        <div>
+                            <label for="reserva-horario">Horário</label>
+                            <input type="time" id="reserva-horario" name="reserva-horario" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="reserva-ocasiao">Ocasião (opcional)</label>
+                        <select id="reserva-ocasiao" name="reserva-ocasiao">
+                            <option value="">Nenhuma em especial</option>
+                            <option>Aniversário</option>
+                            <option>Jantar romântico</option>
+                            <option>Reunião de família</option>
+                            <option>Confraternização de amigos</option>
+                            <option>Reunião de trabalho</option>
+                            <option>Outra ocasião</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="reserva-observacoes">Observações (opcional)</label>
+                        <textarea id="reserva-observacoes" name="reserva-observacoes" placeholder="Ex.: mesa próxima à janela, cadeira infantil, restrição alimentar, decoração especial..."></textarea>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Solicitar reserva pelo WhatsApp</button>
+                    <p class="reserva-note">Ao clicar, o WhatsApp será aberto com os dados da reserva. Revise o texto e toque em enviar para confirmar a solicitação.</p>
+                    <div class="reserva-feedback" id="reserva-feedback" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+
+            <aside class="reserva-info">
+                <div class="reserva-info-card">
+                    <h2>Como funciona</h2>
+                    <ul>
+                        <li>Envie sua solicitação com data, horário e número de pessoas.</li>
+                        <li>Nossa equipe confirma a disponibilidade pelo WhatsApp.</li>
+                        <li>A reserva é garantida após a confirmação.</li>
+                    </ul>
+                </div>
+                <div class="reserva-info-card">
+                    <h2>Horário de funcionamento</h2>
+                    <p>Terça a domingo, das 11h30 às 23h.<br>Segundas-feiras: fechado.</p>
+                </div>
+                <div class="reserva-info-card">
+                    <h2>Grupos grandes</h2>
+                    <p>Para reservas acima de 10 pessoas, informe na observação e nossa equipe entrará em contato para combinar os detalhes.</p>
+                </div>
+            </aside>
+        </div>
+    </section>
+</main>
+<footer>
+    <div class="footer-logo">
+        <img src="imgs/araraab.png" alt="Mascote Arara e Brasa"> <strong>Arara & Brasa</strong>
+    </div>
+    <p>Sabores do Brasil feitos na brasa.</p>
+    <div class="footer-links">
+        <a href="index.html">Início</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="delivery.html">Delivery</a>
+        <a href="reserva.html">Reserva</a>
+        <a href="sac.html">Atendimento</a>
+    </div>
+    <p class="copyright">© 2026 Arara & Brasa.</p>
+</footer>
+
+<script src="script.js"></script>
+<script>
+    (function () {
+        const form = document.getElementById('reserva-form');
+        if (!form) return;
+
+        // Impede datas no passado
+        const dataInput = document.getElementById('reserva-data');
+        if (dataInput) {
+            const hoje = new Date().toISOString().split('T')[0];
+            dataInput.min = hoje;
+        }
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('reserva-nome').value.trim();
+            const pessoas = document.getElementById('reserva-pessoas').value;
+            const telefone = document.getElementById('reserva-telefone').value.trim();
+            const dataRaw = document.getElementById('reserva-data').value;
+            const horario = document.getElementById('reserva-horario').value;
+            const ocasiao = document.getElementById('reserva-ocasiao').value;
+            const observacoes = document.getElementById('reserva-observacoes').value.trim();
+
+            // Formata data dd/mm/aaaa
+            let dataFormatada = dataRaw;
+            if (dataRaw) {
+                const [ano, mes, dia] = dataRaw.split('-');
+                dataFormatada = `${dia}/${mes}/${ano}`;
+            }
+
+            const pessoasTexto = pessoas === '10+' ? 'Mais de 10 pessoas' : `${pessoas} ${pessoas === '1' ? 'pessoa' : 'pessoas'}`;
+
+            const linhas = [
+                '*SOLICITACAO DE RESERVA - ARARA E BRASA*',
+                '',
+                '*Nome da reserva:* ' + nome,
+                '*Quantidade de pessoas:* ' + pessoasTexto,
+                '*Data:* ' + dataFormatada,
+                '*Horario:* ' + horario,
+                '*Telefone:* ' + telefone
+            ];
+
+            if (ocasiao) {
+                linhas.push('*Ocasiao:* ' + ocasiao);
+            }
+
+            if (observacoes) {
+                linhas.push('');
+                linhas.push('*Observacoes:*');
+                linhas.push(observacoes);
+            }
+
+            linhas.push('');
+            linhas.push('Aguardo confirmacao da disponibilidade. Obrigado(a)!');
+
+            const texto = linhas.join('\n');
+
+            const telefoneAtendimento = '5511999999999';
+            const url = 'https://wa.me/' + telefoneAtendimento + '?text=' + encodeURIComponent(texto);
+            window.open(url, '_blank', 'noopener,noreferrer');
+
+            const feedback = document.getElementById('reserva-feedback');
+            feedback.textContent = 'O WhatsApp foi aberto com os dados da sua reserva. Confira a mensagem e toque em enviar para concluir a solicitacao.';
+            feedback.classList.add('visible');
+        });
+    })();
+</script>
+</body>
+</html>
