@@ -1860,3 +1860,405 @@ footer > p {
         font-size: 22px;
     }
 }
+/* ===== Busca e filtro do cardápio ===== */
+.menu-toolbar {
+    max-width: 1100px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.menu-busca {
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+}
+
+.menu-busca input {
+    width: 100%;
+    padding: 13px 16px 13px 44px;
+    border: 1px solid #d8d8d0;
+    border-radius: 10px;
+    font-size: 15px;
+    background: #fff;
+    color: var(--dark);
+    font-family: inherit;
+}
+
+.menu-busca input:focus {
+    outline: 2px solid var(--yellow);
+    border-color: var(--green);
+}
+
+.menu-busca::before {
+    content: "🔍";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.menu-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filtro-btn {
+    padding: 8px 18px;
+    border: 1px solid #d8d8d0;
+    border-radius: 20px;
+    background: #fff;
+    color: var(--dark);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .2s;
+    font-family: inherit;
+}
+
+.filtro-btn:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+}
+
+.filtro-btn.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+}
+
+.sem-resultados {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+    font-size: 16px;
+}
+
+.menu-category.hidden {
+    display: none;
+}
+
+.menu-item.hidden {
+    display: none;
+}
+
+/* ===== Botão de favorito ===== */
+.menu-item {
+    position: relative;
+}
+
+.fav-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: transform 0.2s ease, background 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    line-height: 1;
+    color: #c84630;
+}
+
+.fav-btn:hover {
+    transform: scale(1.15);
+    background: #fff;
+}
+
+.fav-btn.favoritado {
+    background: #ffe9e5;
+}
+
+/* ===== Modo escuro toggle no header ===== */
+.theme-toggle {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+    margin-left: 15px;
+    line-height: 1;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: rotate(15deg);
+}
+
+/* ===== Modo escuro ===== */
+body.dark-mode {
+    --cream: #121410;
+    --white: #1e2119;
+    --dark: #e8e5dd;
+    --gray: #a8a89f;
+    --light-gray: #2a2d24;
+    --green: #2a8f5c;
+    --green-dark: #0c3020;
+}
+
+body.dark-mode .header {
+    background: #0a1f14;
+}
+
+body.dark-mode .menu-item,
+body.dark-mode .delivery-card,
+body.dark-mode .cart,
+body.dark-mode .especialidade-card {
+    background: var(--white);
+    border-color: var(--light-gray);
+}
+
+body.dark-mode .menu-item-imagem,
+body.dark-mode .delivery-food {
+    background: #2a2d24;
+}
+
+body.dark-mode .menu-busca input {
+    background: var(--white);
+    color: var(--dark);
+    border-color: var(--light-gray);
+}
+
+body.dark-mode .filtro-btn {
+    background: var(--white);
+    color: var(--dark);
+    border-color: var(--light-gray);
+}
+
+body.dark-mode .filtro-btn.active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #fff;
+}
+
+body.dark-mode .cart-item {
+    border-color: var(--light-gray);
+}
+
+body.dark-mode .cart-header {
+    border-color: var(--light-gray);
+}
+
+body.dark-mode .menu-category > h2,
+body.dark-mode .delivery-products > h2 {
+    color: #e8e5dd;
+}
+
+body.dark-mode .menu-section,
+body.dark-mode .menu-cta,
+body.dark-mode .especialidades,
+body.dark-mode .delivery-info-section {
+    background: #1a1d17;
+}
+
+body.dark-mode .menu-cta h2,
+body.dark-mode .menu-cta p,
+body.dark-mode .section-title h2,
+body.dark-mode .especialidade-card h2,
+body.dark-mode .especialidade-card p,
+body.dark-mode .delivery-info-section h3,
+body.dark-mode .delivery-info-section p,
+body.dark-mode .delivery-info h3,
+body.dark-mode .food-info h3,
+body.dark-mode .delivery-info p,
+body.dark-mode .food-info p {
+    color: var(--dark);
+}
+
+body.dark-mode .modal-content,
+body.dark-mode .modal-info {
+    background: var(--white);
+}
+
+body.dark-mode .modal-info h2,
+body.dark-mode .modal-info strong {
+    color: var(--dark);
+}
+
+body.dark-mode .modal-info p {
+    color: var(--gray);
+}
+
+body.dark-mode .nutricao {
+    background: #2a2d24;
+    border-color: var(--light-gray);
+}
+
+body.dark-mode .nutricao-grid > div {
+    background: var(--white);
+}
+
+body.dark-mode .observacao-input {
+    background: #2a2d24;
+    color: var(--dark);
+    border-color: var(--light-gray);
+}
+
+body.dark-mode .observacao-label {
+    color: var(--dark);
+}
+
+body.dark-mode #modal-adicionar {
+    background: #2a8f5c;
+}
+
+body.dark-mode .sugestao-upsell {
+    background: #2a2d24;
+    border-color: var(--light-gray);
+}
+
+body.dark-mode .sugestao-upsell p,
+body.dark-mode .sugestao-upsell strong {
+    color: var(--dark);
+}
+
+body.dark-mode .empty-cart {
+    color: var(--gray);
+}
+
+body.dark-mode footer {
+    background: #0a1f14;
+}
+
+body.dark-mode .hero {
+    background: #1a1d17;
+}
+
+body.dark-mode .page-header {
+    background: #0c3020;
+}
+
+body.dark-mode .cta {
+    background: #0c3020;
+}
+
+body.dark-mode .add-btn,
+body.dark-mode .checkout-btn {
+    background: #2a8f5c;
+}
+
+body.dark-mode .add-btn:hover,
+body.dark-mode .checkout-btn:hover {
+    background: var(--orange);
+}
+
+/* ===== Upsell no carrinho ===== */
+.sugestao-upsell {
+    background: #fff8e9;
+    border: 1px solid #f4e4c2;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: 15px;
+    font-size: 13px;
+    color: var(--dark);
+}
+
+.sugestao-upsell strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--green);
+    font-size: 13px;
+}
+
+.sugestao-upsell-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed #e5d9c9;
+}
+
+.sugestao-upsell-item:first-of-type {
+    margin-top: 4px;
+    padding-top: 0;
+    border-top: none;
+}
+
+.sugestao-upsell-item p {
+    flex: 1;
+    font-size: 13px;
+    margin: 0;
+    color: var(--dark);
+}
+
+.sugestao-upsell-item small {
+    display: block;
+    color: var(--gray);
+    font-size: 11px;
+}
+
+.sugestao-upsell-item button {
+    border: none;
+    background: var(--orange);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.sugestao-upsell-item button:hover {
+    background: #d55f1b;
+}
+
+/* ===== Botão ver favoritos (no cardápio) ===== */
+.btn-favoritos {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border: 1px solid var(--orange);
+    border-radius: 20px;
+    background: #fff;
+    color: var(--orange);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: .2s;
+    font-family: inherit;
+}
+
+.btn-favoritos:hover {
+    background: var(--orange);
+    color: #fff;
+}
+
+.btn-favoritos.ativo {
+    background: var(--orange);
+    color: #fff;
+}
+
+body.dark-mode .btn-favoritos {
+    background: var(--white);
+}
+
+body.dark-mode .btn-favoritos.ativo,
+body.dark-mode .btn-favoritos:hover {
+    background: var(--orange);
+    color: #fff;
+}
